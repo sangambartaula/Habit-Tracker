@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        #notificationContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div id="notificationContainer"></div>
+    <div class="stars-container"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <span class="logo-icon">✨</span>
+            <span>Habit Tracker</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#testimonials">Quotes</a></li>
+                <li><a href="welcome.html" class="cta-btn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Dashboard -->
+    <section class="hero">
+        <div class="hero-text">
+            <div class="badge">2025 Edition</div>
+            <h1>Make <span class="highlight">2025</span> your most <span class="highlight">successful</span> year ever</h1>
+            <p>Discover <span class="highlight">Habit Tracker</span> – the website that helps you build positive, life-changing habits with gamification, analytics, and community support.</p>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="dashboard-container">
+            <h1>📊 Dashboard Overview</h1>
+            <div class="stats-box">
+                <p><strong>Total Points:</strong> <span id="totalPoints">0</span></p>
+                <p><strong>Milestone Level:</strong> <span id="milestones">--</span></p>
+                <p><strong>Habits Completed:</strong> <span id="habitsDone">--</span></p>
+                <p><strong>Streak Days:</strong> <span id="streak">--</span></p>
+            </div>
+
+            <!-- Upcoming Reminders Section -->
+            <div class="upcoming-reminders">
+                <h2>🔔 Upcoming Reminders</h2>
+                <div id="remindersList" class="reminders-list">
+                    <!-- Reminders will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>🔥 Powerful Features</h2>
+        <div class="feature-grid">
+            <a href="goal_tracker.html" class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>Goal & Timeline</h3>
+                <p>Set goals with deadlines to stay focused and track your progress over time.</p>
+            </a>
+            <a href="progress.html" class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Progress Tracker</h3>
+                <p>Monitor your habit-building journey with insightful analytics and visualizations.</p>
+            </a>
+            <a href="gamifiedhabittracker.html" class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>Gamified Experience</h3>
+                <p>Earn points, level up, and unlock rewards as you build positive habits.</p>
+            </a>
+            <a href="minigames.html" class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Mini Games</h3>
+                <p>Play fun 2D games that reinforce habit-building and earn bonus points.</p>
+            </a>
+            <a href="Remainder.html" class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>Reminders & Notifications</h3>
+                <p>Receive timely alerts to keep up with your habits and never miss a day.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials Section - NEW -->
+    <section class="testimonials" id="testimonials">
+        <h2>Quotes</h2>
+        
+        <div class="testimonial-indicators">
+            <button class="indicator active" data-index="0"></button>
+            <button class="indicator" data-index="1"></button>
+            <button class="indicator" data-index="2"></button>
+            <button class="indicator" data-index="3"></button>
+        </div>
+        
+        <div class="testimonial-container">
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <div class="quote-icon">❝</div>
+                    <p class="testimonial-text">"Start with something simple and small, then expand over time. If people call it a 'toy' you're definitely onto something."
+
+                        "If you're waiting for encouragement from others, you're doing it wrong. By the time people think an idea is good, it's probably too late."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AL</div>
+                        <div class="author-info">
+                            <h3>Aaron Levie</h3>
+                            <p>An American entrepreneur, co-founder and CEO of a corporate cloud company</p>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">❝</div>
+                    <p class="testimonial-text">"I still think that one of the finest tests of programming ability is to hand the programmer about 30 pages of code and see how quickly he can read through and understand it."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">BL</div>
+                        <div class="author-info">
+                            <h3>Bill Gates</h3>
+                            <p>The founder of Microsoft</p>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">❝</div>
+                    <p class="testimonial-text">"Let us strive for the impossible. The great achievements throughout history have been the conquest of what seemed the impossible."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">CC</div>
+                        <div class="author-info">
+                            <h3>Charlie Chaplin</h3>
+                            <p>Comic Actor and Filmaker</p>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">❝</div>
+                    <p class="testimonial-text">"Without passion, you don't have energy; without energy, you have nothing."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DT</div>
+                        <div class="author-info">
+                            <h3>Donald Trump</h3>
+                            <p>45th and 47th U.S. President</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-controls">
+            <button class="control-btn prev-btn">◀</button>
+            <button class="control-btn next-btn">▶</button>
+        </div>
+    </section>
+
+    
+    
+    
+        <div class="footer-bottom">
+            <p>© 2025 Habit Tracker | Designed by Syntax Squad 🚀</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="falling_stars.js"></script>
+    <script src="notifications.js"></script>
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Testimonial slider
+        let currentSlide = 0;
+        const testimonials = document.querySelectorAll('.testimonial-card');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function showSlide(index) {
+            // Update slider position
+            document.querySelector('.testimonial-slider').style.transform = `translateX(-${index * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            indicators[index].classList.add('active');
+            
+            currentSlide = index;
+        }
+        
+        // Next and previous buttons
+        document.querySelector('.next-btn').addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % testimonials.length;
+            showSlide(currentSlide);
+        });
+        
+        document.querySelector('.prev-btn').addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + testimonials.length) % testimonials.length;
+            showSlide(currentSlide);
+        });
+        
+        // Indicator buttons
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                const index = parseInt(indicator.getAttribute('data-index'));
+                showSlide(index);
+            });
+        });
+        
+        // Achievement cards
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Toggle selected state
+                const isSelected = card.classList.contains('selected');
+                
+                // First remove selected class from all cards
+                document.querySelectorAll('.achievement-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // If the card wasn't already selected, select it
+                if (!isSelected) {
+                    card.classList.add('selected');
+                }
+            });
+        });
+        
+        // Starfall effect
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Random position
+            const posX = Math.random() * window.innerWidth;
+            
+            // Random size
+            const size = Math.random() * 2 + 1;
+            
+            // Random duration
+            const duration = Math.random() * 3 + 2;
+            
+            // Random delay
+            const delay = Math.random() * 5;
+            
+            // Set styles
+            star.style.left = `${posX}px`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.opacity = `${Math.random() * 0.8 + 0.2}`;
+            star.style.animationDuration = `${duration}s`;
+            star.style.animationDelay = `${delay}s`;
+            
+            document.querySelector('.stars-container').appendChild(star);
+            
+            // Remove star after animation completes
+            setTimeout(() => {
+                star.remove();
+            }, (duration + delay) * 1000);
+        }
+        
+        // Create initial stars
+        for (let i = 0; i < 20; i++) {
+            createStar();
+        }
+        
+        // Create new stars periodically
+        setInterval(() => {
+            createStar();
+        }, 300);
+    </script>
+</body>
+</html>

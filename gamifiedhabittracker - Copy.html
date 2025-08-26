@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gamified Experience | Better Me</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="gamified.css" />
+  <style>
+    #draggableStats {
+      position: fixed;
+      top: 100px;
+      left: 11px;
+      background: rgba(40, 40, 60, 0.9);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1.4;
+      color: white;
+      cursor: move;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease;
+      z-index: 9999;
+    }
+
+    #draggableStats strong {
+      color: #f1c40f;
+    }
+
+    #totalPoints {
+      color: #ffd700;
+      font-weight: bold;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.15);
+      padding: 2px 6px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars-container"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🎮</span>
+      <span>Gamified Experience</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="goal_tracker.html">📅 Goals</a></li>
+        <li><a href="progress.html">📈 Progress</a></li>
+        <li><a href="minigames.html">🕹️ Mini Games</a></li>
+        <li><a href="welcome.html" class="cta-btn">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="draggableStats" class="floating-stat">
+    <div>🔥 <strong>Streak:</strong> <span id="streakCount">0</span> days</div>
+    <div style="margin-top: 6px;">🏆 <strong>Score:</strong> <span id="totalPoints">0</span></div>
+  </div>
+
+  <!-- Centered Dashboard Container -->
+  <section style="display: flex; justify-content: center; padding: 40px 20px;">
+    <div class="dashboard-container" style="width: 100%; max-width: 900px;">
+      <h1>🎯 Better Me - Gamified Page</h1>
+      <!-- 📝 Daily Missions -->
+      <div style="margin-bottom: 40px;">
+        <h2>📝 Daily Missions</h2>
+        <div id="dailyMissions" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;"></div>
+        <p id="refreshTimer" style="text-align:center; font-size: 16px; margin-top: 10px; color: #f1c40f;"></p>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="features" style="margin-top: 30px;">
+        <div class="feature-grid">
+
+          <!-- 🏋️ Workout -->
+          <div class="feature-card">
+            <h3>🏋️ Workout</h3>
+            <p>Completed: <span class="completed">0</span></p>
+            <progress value="0" max="5"></progress>
+            <select class="task-select">
+              <option value="">Choose a workout...</option>
+              <option>10 Push-ups</option>
+              <option>20 Jumping Jacks</option>
+              <option>15 Squats</option>
+              <option>5-min Jog</option>
+              <option>7 Burpees</option>
+              <option>2-min Plank</option>
+              <option>10 Sit-ups</option>
+              <option>Stretch for 10 min</option>
+            </select>
+            <button onclick="completeHabit(this, 10)">Completed</button>
+          </div>
+
+          <!-- 📚 Reading -->
+          <div class="feature-card">
+            <h3>📚 Reading</h3>
+            <p>Completed: <span class="completed">0</span></p>
+            <progress value="0" max="5"></progress>
+            <select class="task-select">
+              <option value="">Choose a reading task...</option>
+              <option>Read 1 chapter of a novel</option>
+              <option>Read 5 pages of self-help</option>
+              <option>Read an article/blog</option>
+              <option>Review class notes</option>
+              <option>Read a poem</option>
+              <option>Read 2 news articles</option>
+              <option>Write a book summary</option>
+            </select>
+            <button onclick="completeHabit(this, 5)">Completed</button>
+          </div>
+
+          <!-- 🥗 Eat Healthy -->
+          <div class="feature-card">
+            <h3>🥗 Eat Healthy</h3>
+            <p>Completed: <span class="completed">0</span></p>
+            <progress value="0" max="5"></progress>
+            <select class="task-select">
+              <option value="">Choose a meal task...</option>
+              <option>Ate 1 fruit</option>
+              <option>No junk food</option>
+              <option>Drank green smoothie</option>
+              <option>Cooked at home</option>
+              <option>Had a plant-based meal</option>
+              <option>Salad lunch</option>
+              <option>No sugar in tea/coffee</option>
+            </select>
+            <button onclick="completeHabit(this, 5)">Completed</button>
+          </div>
+
+          <!-- 💧 Hydration -->
+          <div class="feature-card">
+            <h3>💧 Hydration</h3>
+            <p>Completed: <span class="completed">0</span></p>
+            <progress value="0" max="5"></progress>
+            <select class="task-select">
+              <option value="">Choose hydration goal...</option>
+              <option>Drink 1 glass of water</option>
+              <option>Refill your bottle</option>
+              <option>No soda today</option>
+              <option>Drink herbal tea</option>
+              <option>Track water intake</option>
+              <option>Hydrate before meal</option>
+              <option>Drink 2L of water</option>
+            </select>
+            <button onclick="completeHabit(this, 3)">Completed</button>
+          </div>
+        </div>
+      </div>
+      <!-- Leaderboard -->
+      <div class="leaderboard"
+        style="margin-top: 40px; background: #1e1e2f; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); max-width: 1000px; margin-left: auto; margin-right: auto;">
+        <h2 style="text-align: center; font-size: 2rem; color: #f1c40f;">🏆 Leaderboard</h2>
+        <div style="display: flex; justify-content: center; margin: 20px 0;">
+          <input type="text" id="playerName" placeholder="Enter your name"
+            style="padding: 8px 12px; border-radius: 6px; border: none; font-size: 1rem;" />
+          <button onclick="saveScore()"
+            style="margin-left: 10px; background-color: #f1c40f; border: none; padding: 8px 14px; font-weight: bold; border-radius: 6px; cursor: pointer;">Save
+            Score</button>
+        </div>
+        <table style="width: 100%; text-align: center; border-collapse: collapse; color: white;">
+          <thead>
+            <tr style="border-bottom: 2px solid #f1c40f;">
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <div id="celebrationOverlay" style="display:none;">
+    <div class="celebration-text">🎉 You are Amazing!!! You Completed Everything! 🎉</div>
+  </div>
+  <div id="notificationContainer"></div>
+  <script src="notifications.js"></script>
+  <script src="gamified.js"></script>
+</body>
+
+</html>

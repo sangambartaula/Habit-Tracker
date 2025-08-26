@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Tracker</title>
+    <link rel="stylesheet" href="goal_tracker.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">📊 Goal & Timeline</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Goal Tracker Form Section -->
+    <section class="goal-tracker">
+        <h2>📅 Set Your Habit Goal</h2>
+        <form id="habitForm">
+            <label for="name">Habit Name:</label>
+            <input type="text" id="name" placeholder="E.g., Morning Exercise" required>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" required onclick="this.showPicker()" >
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" required onclick="this.showPicker()">
+
+            
+
+            <button type="submit" class="primary-btn">✅ Save Habit</button>
+        </form>
+    </section>
+
+    <!-- Habit List Section -->
+    <section class="habit-list">
+        <h2>📋 Your Habits</h2>
+        <ul id="habitContainer"></ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Habit Tracker | Designed by Syntax Squad 🚀</p>
+    </footer>
+
+    <script src="notifications.js"></script>
+    <script src="goal_tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Reminder Calendar</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .calendar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .home-button {
+            background: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .home-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .calendar-header button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .calendar-header button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .calendar-day {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .calendar-date {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+        .calendar-date:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .reminder-dot {
+            width: 8px;
+            height: 8px;
+            background: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #1e1e1e;
+            padding: 35px;
+            border-radius: 12px;
+            width: 380px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 500;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            line-height: 1;
+        }
+        .close-modal:hover {
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #3498db;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .modal-content select,
+        .modal-content input[type="time"] {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        .modal-content select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233498db'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+        .modal-content select option {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 10px;
+        }
+        .modal-content input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(0.8);
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .modal-content select:focus,
+        .modal-content input[type="time"]:focus {
+            outline: none;
+            border-color: #3498db;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .modal-content select:hover,
+        .modal-content input[type="time"]:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .modal-content button[onclick="saveReminder()"] {
+            width: 100%;
+            padding: 14px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .modal-content button[onclick="saveReminder()"]:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        .no-habits-message {
+            text-align: center;
+            padding: 20px;
+            background: #2d2d2d;
+            border-radius: 10px;
+            margin: 0;
+            color: #999;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .no-habits-message span {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .reminder-list {
+            margin-top: 30px;
+            background: rgba(30, 30, 30, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        .reminder-list h3 {
+            color: #fff;
+            margin: 0 0 25px 0;
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+        .reminder-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .section-header {
+            color: #3498db;
+            font-size: 1.1rem;
+            margin: 25px 0 15px 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+        .add-reminder-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .add-reminder-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        .reminder-item {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .reminder-item:last-child {
+            margin-bottom: 0;
+        }
+        .reminder-item:hover {
+            background: #333;
+        }
+        .reminder-item.clickable {
+            cursor: pointer;
+        }
+        .reminder-item.clickable:hover {
+            transform: translateX(5px);
+        }
+        .reminder-content {
+            flex: 1;
+            margin-right: 15px;
+        }
+        .reminder-title {
+            color: #fff;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .reminder-meta {
+            font-size: 0.9rem;
+            color: #999;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .reminder-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+        .delete-btn:hover {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+            transform: scale(1.1);
+        }
+        #notificationContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .add-reminder-btn.small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            background: rgba(52, 152, 219, 0.2);
+        }
+        .add-reminder-btn.small:hover {
+            background: #3498db;
+        }
+    </style>
+</head>
+<body>
+<div id="notificationContainer"></div>
+
+<header>
+    <h1>📅 Smart Reminder Calendar</h1>
+    <a href="index.html" class="home-button" title="Go to Home">🏠 Home</a>
+</header>
+
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button onclick="prevMonth()">⏪ Previous Month</button>
+        <h2 id="monthYear"></h2>
+        <button onclick="nextMonth()">Next Month ⏩</button>
+    </div>
+    <div class="calendar-grid" id="calendar"></div>
+</div>
+
+<!-- Modal for adding reminder -->
+<div id="reminderModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <div class="modal-header">
+            <h3>Set Reminder</h3>
+        </div>
+        <div class="form-group">
+            <label for="habitInput">Select Habit</label>
+            <select id="habitInput" onchange="handleHabitSelect()">
+                <option value="">Select a Habit</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="timeInput">Time</label>
+            <input type="time" id="timeInput">
+        </div>
+        <div class="form-group">
+            <label for="frequencyInput">Frequency</label>
+            <select id="frequencyInput">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+        <button onclick="saveReminder()">Set Reminder</button>
+    </div>
+</div>
+
+<section class="reminder-list">
+    <h3>📋 Reminders for <span id="selectedDateDisplay">[Select a Date]</span></h3>
+    <ul id="reminderList"></ul>
+</section>
+
+<script src="notifications.js"></script>
+<script src="remscript.js"></script>
+</body>
+</html>

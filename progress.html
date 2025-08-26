@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #a855f7;
+            --primary-light: #c084fc;
+            --secondary: #8b5cf6;
+            --background: #0f172a;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background-color: var(--background);
+            color: var(--text);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .score-display {
+            display: flex;
+            gap: 20px;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .home-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .layout-column {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .column-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .column-icon {
+            font-size: 1.8rem;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .chart-tab {
+            padding: 8px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .chart-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .filter-section {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .progress-list {
+            margin-top: 20px;
+        }
+
+        .progress-item {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .progress-item h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .progress-item p {
+            color: var(--text-muted);
+            margin: 5px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Floating Help Button Styles */
+        .floating-help {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            cursor: move;
+            user-select: none;
+            touch-action: none;
+        }
+        
+        .help-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+        }
+        
+        .help-tooltip {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background-color: var(--card-bg);
+            color: var(--text);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            line-height: 1.5;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            pointer-events: auto;
+            z-index: 1001;
+        }
+
+        .help-tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .close-tooltip {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-tooltip:hover {
+            color: var(--text);
+        }
+        
+        .help-tooltip h3 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .help-tooltip h4 {
+            color: var(--primary-light);
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .help-tooltip p {
+            margin: 8px 0;
+        }
+        
+        .help-tooltip ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        .help-tooltip ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        
+        .help-tooltip li {
+            margin-bottom: 5px;
+        }
+        
+        .help-tooltip .example {
+            font-style: italic;
+            color: var(--text-muted);
+            margin: 5px 0 10px 15px;
+        }
+        
+        .help-button:hover + .help-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* For smaller screens */
+        @media (max-width: 768px) {
+            .floating-help {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .help-button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .help-tooltip {
+                width: 280px;
+                max-height: 70vh;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">📊</div>
+            Progress Tracker
+        </div>
+        <div class="score-display">
+            <div class="score-item">
+                ⭐ Score: <span id="currentScore">0</span> XP
+            </div>
+            <div class="score-item">
+                | 🎮 Total Score: <span id="totalScore">0</span> XP
+            </div>
+        </div>
+        <a href="index.html" class="home-button">
+            🏠 Home
+        </a>
+    </header>
+
+    <div class="main-layout">
+        <div class="layout-column">
+            <div class="column-header">
+                <div class="column-icon">🔥</div>
+                <h2>Your Performance</h2>
+            </div>
+            <div class="chart-tabs">
+                <div class="chart-tab active" id="progressTab">Progress</div>
+                <div class="chart-tab" id="trendTab">Trend</div>
+            </div>
+            <div class="chart-container">
+                <!-- Chart will be rendered here -->
+            </div>
+        </div>
+
+        <div class="layout-column">
+            <div class="column-header">
+                <div class="column-icon">📊</div>
+                <h2>Statistics</h2>
+                <span id="categoryLabel" style="margin-left: auto; font-size: 0.9rem; color: var(--text-muted);">All Categories</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeItems">0</div>
+                    <div class="stat-label">Active Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedItems">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="miniGamesCount">0</div>
+                    <div class="stat-label">Mini Games</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 0 20px 20px 20px;">
+        <div class="filter-section">
+            <div class="category-title" id="categoryTitle">All Categories</div>
+            <select id="categoryFilter" class="filter-select">
+                <option value="All">All Categories</option>
+                <option value="Goal and Timeline">Goal and Timeline</option>
+                <option value="Gamified Experience">Gamified Experience</option>
+                <option value="Mini Games">Mini Games</option>
+            </select>
+        </div>
+
+        <div id="progressList" class="progress-list">
+            <!-- Progress items will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Floating Help Button -->
+    <div class="floating-help" id="helpButton">
+        <button class="help-button">❔</button>
+        <div class="help-tooltip">
+            <h3>How Progress is Calculated - Simple Explanation</h3>
+            <p>Here's a straightforward explanation of how progress is calculated for each section:</p>
+            
+            <h4>1. Goals and Timelines</h4>
+            <p>If you've marked completion dates:</p>
+            <ul>
+                <li>We count how many days you've marked as completed</li>
+                <li>We divide that by the total number of days between start and end dates</li>
+                <li>We convert to a percentage (multiply by 100)</li>
+            </ul>
+            
+            <p>If you haven't marked any completion dates:</p>
+            <ul>
+                <li>We look at how many days have passed since you started</li>
+                <li>We divide that by the total number of days planned for the goal</li>
+                <li>We convert to a percentage (multiply by 100)</li>
+            </ul>
+            
+            <p class="example">Example: If your goal runs for 10 days and you've completed 5 days, your progress is 50%.</p>
+            
+            <h4>2. Mini-Games</h4>
+            <p>For your overall mini-game score:</p>
+            <ul>
+                <li>We take your best score and divide it by 1000</li>
+                <li>We convert to a percentage (multiply by 100)</li>
+                <li>So a score of 500 equals 50% progress</li>
+            </ul>
+            
+            <p>For individual games:</p>
+            <p>Each game gets a portion of your total score:</p>
+            <ul>
+                <li>Bike Road Challenge: 20% of your total</li>
+                <li>Aim Trainer: 15% of your total</li>
+                <li>Memory Match: 25% of your total</li>
+                <li>Car Avoidance: 20% of your total</li>
+                <li>Star Catcher: 20% of your total</li>
+            </ul>
+            
+            <p>For each game, we divide its score by 200 to get the progress percentage</p>
+            <p class="example">So a score of 100 in any game equals 50% progress</p>
+            
+            <h4>3. Gamified Experience</h4>
+            <p>For custom scores:</p>
+            <ul>
+                <li>We divide your points by 500</li>
+                <li>We convert to a percentage (multiply by 100)</li>
+                <li>So 250 points equals 50% progress</li>
+            </ul>
+            
+            <p>For your streak:</p>
+            <ul>
+                <li>Each day of your streak counts as 5% progress</li>
+                <li>So a 10-day streak equals 50% progress</li>
+                <li>A 20-day streak or longer equals 100% progress</li>
+            </ul>
+            
+            <p>For total points:</p>
+            <ul>
+                <li>We divide your total points by 500</li>
+                <li>We convert to a percentage (multiply by 100)</li>
+                <li>So 250 total points equals 50% progress</li>
+            </ul>
+            
+            <p>All progress values are capped at 100%, so you'll never see more than 100% complete for any item.</p>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+    <script src="notifications.js"></script>
+    <script src="progress.js"></script>
+    
+    <!-- Draggable Help Button Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const helpButton = document.getElementById('helpButton');
+            const helpTooltip = helpButton.querySelector('.help-tooltip');
+            let isDragging = false;
+            let offsetX, offsetY;
+            let isTooltipVisible = false;
+            
+            // Add close button to tooltip
+            const closeButton = document.createElement('button');
+            closeButton.className = 'close-tooltip';
+            closeButton.innerHTML = '×';
+            closeButton.addEventListener('click', function() {
+                hideTooltip();
+            });
+            helpTooltip.insertBefore(closeButton, helpTooltip.firstChild);
+            
+            function showTooltip() {
+                helpTooltip.classList.add('visible');
+                isTooltipVisible = true;
+            }
+            
+            function hideTooltip() {
+                helpTooltip.classList.remove('visible');
+                isTooltipVisible = false;
+            }
+            
+            // Show tooltip on hover
+            helpButton.addEventListener('mouseenter', function() {
+                if (!isTooltipVisible) {
+                    showTooltip();
+                }
+            });
+            
+            // Hide tooltip on mouseleave (only if not clicked)
+            helpButton.addEventListener('mouseleave', function() {
+                if (!isTooltipVisible) {
+                    hideTooltip();
+                }
+            });
+            
+            // Toggle tooltip on click
+            helpButton.querySelector('.help-button').addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isTooltipVisible) {
+                    hideTooltip();
+                } else {
+                    showTooltip();
+                }
+            });
+            
+            // For mouse events
+            helpButton.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            
+            // For touch events
+            helpButton.addEventListener('touchstart', startDragTouch);
+            document.addEventListener('touchmove', dragTouch);
+            document.addEventListener('touchend', endDrag);
+            
+            function startDrag(e) {
+                isDragging = true;
+                const rect = helpButton.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                helpButton.style.transition = 'none';
+            }
+            
+            function startDragTouch(e) {
+                isDragging = true;
+                const rect = helpButton.getBoundingClientRect();
+                const touch = e.touches[0];
+                offsetX = touch.clientX - rect.left;
+                offsetY = touch.clientY - rect.top;
+                helpButton.style.transition = 'none';
+                e.preventDefault();
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                
+                const maxX = window.innerWidth - helpButton.offsetWidth;
+                const maxY = window.innerHeight - helpButton.offsetHeight;
+                
+                const boundedX = Math.max(0, Math.min(x, maxX));
+                const boundedY = Math.max(0, Math.min(y, maxY));
+                
+                helpButton.style.left = boundedX + 'px';
+                helpButton.style.top = boundedY + 'px';
+                helpButton.style.right = 'auto';
+                helpButton.style.bottom = 'auto';
+            }
+            
+            function dragTouch(e) {
+                if (!isDragging) return;
+                
+                const touch = e.touches[0];
+                const x = touch.clientX - offsetX;
+                const y = touch.clientY - offsetY;
+                
+                const maxX = window.innerWidth - helpButton.offsetWidth;
+                const maxY = window.innerHeight - helpButton.offsetHeight;
+                
+                const boundedX = Math.max(0, Math.min(x, maxX));
+                const boundedY = Math.max(0, Math.min(y, maxY));
+                
+                helpButton.style.left = boundedX + 'px';
+                helpButton.style.top = boundedY + 'px';
+                helpButton.style.right = 'auto';
+                helpButton.style.bottom = 'auto';
+                
+                e.preventDefault();
+            }
+            
+            function endDrag() {
+                isDragging = false;
+                helpButton.style.transition = 'transform 0.2s ease';
+            }
+        });
+    </script>
+</body>
+</html>
