@@ -1,0 +1,28 @@
+{
+    "name": "habit-tracker-tests",
+    "version": "1.0.0",
+    "description": "Comprehensive test suite for Habit Tracker application",
+    "scripts": {
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage",
+        "test:auth": "jest tests/auth.test.js",
+        "test:games": "jest tests/games.test.js",
+        "test:dashboard": "jest tests/dashboard.test.js",
+        "test:notifications": "jest tests/notifications.test.js",
+        "test:forms": "jest tests/formValidation.test.js"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^6.1.4",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^30.2.0"
+    },
+    "keywords": [
+        "testing",
+        "jest",
+        "habit-tracker",
+        "unit-tests",
+        "white-box-testing"
+    ]
+}
